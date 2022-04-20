@@ -30,6 +30,18 @@ public class User {
 	@NotBlank
 	@Size(min = 2, max = 16, message = "Username must have at least 2 characters, but no more than 16")
 	private String username;
+	@NotNull
+	@NotBlank
+	@Size(min = 5, max = 20, message = "Email must have at least 5 characters, but no more than 20")
+	private String email;
+	@NotNull
+	@NotBlank
+	@Size(min = 4, max = 30, message = "Address must have at least 4 characters, but no more than 30")
+	private String address;
+	@NotNull
+	@NotBlank
+	@Size(min = 5, max = 13, message = "Mobile Number must have atl least 5 characters, but no more than 13")
+	private int mobile_number;
 	
 	// TODO: Add 3 new fields to the User class, with appropriate validation annotations applied to each
 	
@@ -37,10 +49,13 @@ public class User {
 		
 	}
 
-	public User(int id, String username) {
+	public User(int id, String username, String email, String address, int mobile_number) {
 		super();
 		this.id = id;
 		this.username = username;
+		this.email = email;
+		this.address = address;
+		this.mobile_number = mobile_number;
 	}
 
 	public int getId() {
@@ -58,10 +73,35 @@ public class User {
 	public void setUsername(String username) {
 		this.username = username;
 	}
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public int getMobile_number() {
+		return mobile_number;
+	}
+
+	public void setMobile_number(int mobile_number) {
+		this.mobile_number = mobile_number;
+	}
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + "]";
+		return "User [id=" + id + ", username=" + username + ", email=" + email + ", address=" + address
+				+ ", mobile_number=" + mobile_number + "]";
 	}
 	
 }

@@ -44,24 +44,38 @@ public class UserController {
 	
 	// POST
 	@PostMapping // indicates POST requests are accepted at localhost:8080/user
-	public User createUser(@Valid @RequestBody User user) {
-		// The call to 
-		user.setId(COUNTER++);
-		users.add(user);
-		return user;
+	public User createUser(@RequestBody User user) {
+        // @RequestBody tells Spring to retrieve the data in the requests body and then create an instance        // of User (using the default empty constructor) and then calls its mutators (setters) to set its values        user.setId(COUNTER++);
+        users.add(user);
+        return user;
 	}
 	
 	// PUT
 	@PutMapping(path = "/{id}")
 	public User updateUser(@RequestBody User user, @PathVariable(name = "id") int id) {
-		// TODO: In your implementation, ensure @Valid is called on the request body before updating
-		return null;
+        // Get the user from the list        
+		User savedUser = null;
+        for (int i = 0; i < users.size(); i++) {
+            if (this.users.get(i).getId() == id) {
+                savedUser = this.users.get(i);
+            }
+        }
+        // Update that user        
+        if (savedUser != null) {
+            savedUser.setUsername(user.getUsername());
+        }
+        // Return that user        
+        return savedUser;
 	}
 	
 	// DELETE
-	@DeleteMapping(path = "/{id}")
 	public User deleteUser(@PathVariable(name = "id") int id) {
-		// Your implementation here
-		return null;
+        // Get the user        
+		User user = null;
+        for (int i = 0; i < users.size(); i++) {
+            if (this.users.get(i).getId() == id) {
+                user = this.users.get(i);
+            }
+        }
 	}
 }
