@@ -47,7 +47,7 @@ public class UserController {
 		return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
 	}
 	
-	@PostMapping
+	@PostMapping // Creating a user
 	public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
 		User newUser = userRepository.save(user);
 		
