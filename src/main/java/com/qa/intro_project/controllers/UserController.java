@@ -70,22 +70,23 @@ public class UserController {
 	}
 	
 	@PutMapping(path = "/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable(name = "id") int id) {
+    public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable(name = "id") int id) {
         // Get the user from the list
-        User user = null;
+        User savedUser = null;
         for (int i = 0; i < users.size(); i++) {
             if (this.users.get(i).getId() == id) {
-                user = this.users.get(i);
+                savedUser = this.users.get(i);
             }
         }
         // Update that user
-        if (user != null) {
-            user.setUsername(user.getUsername());
-            return new ResponseEntity<User>(user, HttpStatus.OK);
-        }
+        if (savedUser != null) {
+            savedUser.setUsername(user.getUsername());
         // Return that user
-        return new ResponseEntity<User>(HttpStatus.NOT_ACCEPTABLE);
-    }
+        return ResponseEnity.ok(savedUser);
+       }
+        return ResponseEntity.notFound()
+        		.build();
+	}
 	
 	@DeleteMapping(path = "/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable(name = "id") int id) {
@@ -101,5 +102,5 @@ public class UserController {
         users.remove(user);
         // Return the removed user        
         return new ResponseEntity<User>(user, HttpStatus.OK);
+		}
 	}
-}
