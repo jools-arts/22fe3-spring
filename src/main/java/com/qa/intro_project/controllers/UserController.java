@@ -1,5 +1,6 @@
 package com.qa.intro_project.controllers;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,17 +66,40 @@ public class UserController {
 		// We can then create the response and pass the headers to the constructor
 		// - ResponseEntity(body, MultiValueMap, HttpStatus)
 		return new ResponseEntity<User>(user, headers, HttpStatus.CREATED);
+		
 	}
 	
 	@PutMapping(path = "/{id}")
-	public User updateUser(@RequestBody User user, @PathVariable(name = "id") int id) {
-		// TODO: Using your implementation of 'updateUser', improve your existing solution by using the ResponseEntity class
-		return null;
-	}
+    public ResponseEntity<User> updateUser(@PathVariable(name = "id") int id) {
+        // Get the user from the list
+        User user = null;
+        for (int i = 0; i < users.size(); i++) {
+            if (this.users.get(i).getId() == id) {
+                user = this.users.get(i);
+            }
+        }
+        // Update that user
+        if (user != null) {
+            user.setUsername(user.getUsername());
+            return new ResponseEntity<User>(user, HttpStatus.OK);
+        }
+        // Return that user
+        return new ResponseEntity<User>(HttpStatus.NOT_ACCEPTABLE);
+    }
 	
 	@DeleteMapping(path = "/{id}")
-	public User deleteUser(@PathVariable(name = "id") int id) {
-		// TODO: Using your implementation of 'deleteUser', improve your existing solution by using the ResponseEntity class
-		return null;
+    public ResponseEntity<User> deleteUser(@PathVariable(name = "id") int id) {
+        // Get the user        
+		User user = null;
+        for (int i = 0; i < users.size(); i++) {
+            if (this.users.get(i).getId() == id) {
+                user = this.users.get(i);
+                return new ResponseEntity<User>(user, HttpStatus.OK);
+            }
+        }
+        // Remove the user        
+        users.remove(user);
+        // Return the removed user        
+        return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 }
