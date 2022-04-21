@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.qa.intro_project.data.entity.Post;
 import com.qa.intro_project.data.entity.User;
-import com.qa.intro_project.data.repository.PostRepository;
+import com.qa.intro_project.data.entity.UserProfile;
+import com.qa.intro_project.data.repository.UserProfileRepository;
 import com.qa.intro_project.data.repository.UserRepository;
 
 @RestController
@@ -28,10 +28,12 @@ import com.qa.intro_project.data.repository.UserRepository;
 public class UserController {
 	
 	private UserRepository userRepository;
+	private UserProfileRepository userProfileRepository;
 	
 	@Autowired // Instructs the Spring IoC container to inject the required dependency
-	public UserController(UserRepository userRepository) {
+	public UserController(UserRepository userRepository, UserProfileRepository userProfileRepository) {
 		this.userRepository = userRepository;
+		this.userProfileRepository = userProfileRepository;
 	}
 	
 	@GetMapping
@@ -49,17 +51,18 @@ public class UserController {
 		return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
 	}
 	
-	@GetMapping(path = "/{id}/posts")
-	public ResponseEntity<List<Post>> getUserPosts(@PathVariable(name = "id") int userId) {
-		Optional<User> user = userRepository.findById(userId);
-		
-		if (user.isPresent()) return ResponseEntity.ok(user.get().getPosts());
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	}
-	
 	@PostMapping
 	public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
+		UserProfile profile = user.getUserProfile();
+		user.setUserProfile(null);
+		
 		User newUser = userRepository.save(user);
+		
+		if (profile != null) {
+			profile.setUser(newUser);
+			profile = userProfileRepository.save(profile);
+		}
+		newUser.setUserProfile(profile);
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Location", "http://localhost:8080/user/" + newUser.getId());

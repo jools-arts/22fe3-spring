@@ -40,32 +40,31 @@ public class User {
 	@Email
 	private String email;
 	
-	@OneToOne(mappedBy = "user",
-			  optional = false,
-			  cascade = {CascadeType.ALL},
-			  targetEntity = UserProfile.class,
+	@OneToOne(mappedBy = "user", // mappedBy is the name of the field in UserProfile representing the other side of the relationship
+			  optional = false, // is the relationship optional
+			  cascade = {CascadeType.ALL}, // cascade is used to cascade operations, for example if I delete a user, their user profile will also be automatically deleted
+			  targetEntity = UserProfile.class, // the type of the class on the other side of the relationship
 			  fetch = FetchType.EAGER)
-	@JsonProperty(access = Access.READ_ONLY)
+	@JsonProperty(access = Access.READ_WRITE)
 	private UserProfile userProfile;
+	
+	// fetch says how data should be retrieved from the database
+	// - EAGER fetching means the data will be retrieved immediately
+	// - LAZY fetching means the data will only be requested when it is needed/used
 	
 	// @OneToMany signifies a one to many relationship between user and posts where User is the 
 	// parent of the relationship. Post owns the relationship as it stores the id of the user
 	// - mappedBy signifies the name of the field in Post.class which owns the relationship
 	// - targetEntity specifies the class that is being mapped
-	@OneToMany(mappedBy = "user", targetEntity = Post.class, fetch = FetchType.EAGER)
-	@JsonIgnore // stops this field from being serialised or deserialised during a request
-	private List<Post> posts;
 		
 	protected User() {
 		super();
-		this.posts = new ArrayList<>();
 	}
 	
 	public User(String username, String email) {
 		super();
 		this.username = username;
 		this.email = email;
-		this.posts = new ArrayList<>();
 	}
 
 	public User(int id, String username, String email) {
@@ -73,14 +72,12 @@ public class User {
 		this.id = id;
 		this.username = username;
 		this.email = email;
-		this.posts = new ArrayList<>();
 	}
 	
 	public User(String username, String email, UserProfile userProfile) {
 		super();
 		this.username = username;
 		this.email = email;
-		this.posts = new ArrayList<>();
 		this.userProfile = userProfile;
 	}
 
@@ -108,14 +105,6 @@ public class User {
 		this.email = email;
 	}
 
-	public List<Post> getPosts() {
-		return posts;
-	}
-	
-	public void setPosts(List<Post> posts) {
-		this.posts = posts;
-	}
-	
 	public UserProfile getUserProfile() {
 		return userProfile;
 	}
