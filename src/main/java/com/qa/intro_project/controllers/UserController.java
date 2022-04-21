@@ -58,7 +58,7 @@ public class UserController {
 	}
 	
 	@PutMapping(path = "/{id}")
-	public User updateUser(@RequestBody User user, @PathVariable(name = "id") int id) {
+	public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable(name = "id") int id) {
 		// TODO: Implement the update user functionality using the user repository
 		// (HINT) Check if user exists, retrieve user if so, update fields on retrieved user, save retrieved user
 		
@@ -79,11 +79,11 @@ public class UserController {
 		
 	}
 	// user doesn't exist
-	return new ResponseEntiy<>(HttpStatus.NOT_FOUND);
+	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 }
 	
 	@DeleteMapping(path = "/{id}")
-	public User deleteUser(@PathVariable(name = "id") int id) {
+	public ResponseEntity<User> deleteUser(@PathVariable(name = "id") int id) {
 		// TODO: Implement the delete user functionality using the user repository
 		Optional<User> user = userRepository.findById(id);
 		
