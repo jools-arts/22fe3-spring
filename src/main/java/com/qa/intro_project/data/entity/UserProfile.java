@@ -33,8 +33,23 @@ public class UserProfile {
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id") // name of column in the UserProfile table to store id of User
-	@JsonIgnore
+	@JsonIgnore // don't serialise or deserialise JSON 
+				//(don't create a user object when a user profile object is posted, specifically to our controller
+				//(don't create a user object when serialising a user profile into JSON)
 	private User user;
+	
+	// When using a LAZY fetch type, until the actual data is requested it is represented
+	// by a proxy object
+	// - trying to serialise this object as JSON will result in an error
+	
+	// UserProfile table
+	// - id
+	// - forename
+	// - surname
+	// - age
+	// - biologicalAge
+	// - gender
+	// - user_id
 	
 	protected UserProfile() {
 		super();

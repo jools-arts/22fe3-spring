@@ -40,13 +40,17 @@ public class User {
 	@Email
 	private String email;
 	
-	@OneToOne(mappedBy = "user",
-			  optional = false,
-			  cascade = {CascadeType.ALL},
-			  targetEntity = UserProfile.class,
+	@OneToOne(mappedBy = "user", // mappedBy is the name of the field in the userProfile
+			  optional = false, // is the relationship optional
+			  cascade = {CascadeType.ALL}, // cascade is used to cascade operations, for example if I delete a user, their user profile will also automatically be deleted
+			  targetEntity = UserProfile.class, // the type of the class on the other side of the relationship
 			  fetch = FetchType.EAGER)
-	@JsonProperty(access = Access.READ_ONLY)
+	@JsonProperty(access = Access.READ_WRITE)
 	private UserProfile userProfile;
+	
+	// fetch says how data should be retrieved from the database
+	// - EAGER fetching means the data will be retrieved immediately
+	// - LAZY fetching means the data will only be requested when it is needed/used
 	
 	// @OneToMany signifies a one to many relationship between user and posts where User is the 
 	// parent of the relationship. Post owns the relationship as it stores the id of the user
