@@ -51,6 +51,9 @@ public class PostController {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
+	// When I create a post, it is required that the user id also be provided
+	// of the user that is creating the post
+	// if the user doesn't exist, we will return a 404 - user not found
 	@PostMapping
 	public ResponseEntity<Post> createPost(@Valid @RequestBody Post post) {
 		Post newPost = postRepository.save(post);
