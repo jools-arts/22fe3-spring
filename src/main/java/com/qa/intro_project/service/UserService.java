@@ -30,10 +30,17 @@ public class UserService {
 	}
 
 	public List<UserDTO> getUsers() {
-		return userRepository.findAll()
-							 .stream()
-							 .map(this::toDTO)
-							 .collect(Collectors.toList());
+		List<User> users = userRepository.findAll();
+		List<UserDTO> dtos = new ArrayList<>();
+		
+		for (User user: users) {
+			dtos.add(this.toDTO(user));
+		}
+		return dtos;
+		/*
+		 * return userRepository.findAll() .stream() .map(this::toDTO)
+		 * .collect(Collectors.toList());
+		 */
 	}
 	
 	public UserDTO getUser(int id) {
@@ -63,6 +70,10 @@ public class UserService {
 	
 	private UserDTO toDTO(User user) {
 		return this.modelMapper.map(user, UserDTO.class);
+		
+		//ModelMapper will create an instance of UserDTO
+		// - it will then assign the values of all fields in 'user', which have the same name
+		// as the fields in 'UserDTO.class', to that new instance of UserDTO
 	}
 	
 }
