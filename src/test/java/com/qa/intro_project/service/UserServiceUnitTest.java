@@ -3,6 +3,7 @@ package com.qa.intro_project.service;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.modelmapper.ModelMapper;
 
 import com.qa.intro_project.data.entity.User;
 import com.qa.intro_project.data.repository.UserRepository;
+import com.qa.intro_project.dto.UserDTO;
 
 // Not using @SpringBootTest because we do not need the whole application context
 //
@@ -37,7 +39,8 @@ public class UserServiceUnitTest {
 	
 	@BeforeEach
 	public void init() {
-		users = List.of(new User(1, "Bob", "bob@mail.com"), new User(2, "Sarah", "sarah@mail.com");
+		users = List.of(new User(1, "Bob", "bob@mail.com"), new User(2, "Sarah", "sarah@mail.com"));
+		userDTOs = List.of(new)
 	}
 	
 	@Test
@@ -45,18 +48,31 @@ public class UserServiceUnitTest {
 		
 		// Arrange-Act-Assert
 		when(userRepository.findAll()).thenReturn(users);
-		when(modelMapper.map(users.get(0),  null));
+		when(modelMapper.map(users.get(0),  userDTOs.class)).thenReturn(userDTOs.get(0));
+		when(modelMapper.map(users.get(0),  userDTOs.class)).thenReturn(userDTOs.get(1));
 		
 		// Arrange: setup the data and components under test
+		when(userRepository.findById(id)).thenReturn(Optional.of(users.get(0)));
 		
 		// Act: performing the action under test
+		List<UserDTO> actual  = userService.getUsers();
 		
 		// Assert: validate the action was successful
+		assertEquals(userDTOs, actual);
+		verify(userRepository).findAll();
+		verify(modelMapper).map(users.get(0), UserDTO.class);
+		verify(modelMapper).map(users.get(1), UserDTO.class);
 		
 	}
 	
 	@Test
 	public void getByIdTest() {
+		User user = users.get(0);
+		UserDTO userDTO = userDTOs.get(0);
+		int id = user.getId();
+		
+		//Arrange
+		when(userRepository.findById(id)).thenReturn((Optional.of(user));
 		
 	}
 	
